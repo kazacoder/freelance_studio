@@ -30,7 +30,7 @@ export class Router {
                 }
             },
             {
-                route: '/sing-up',
+                route: '/sign-up',
                 title: 'Регистрация',
                 filePathTemplate: '/templates/sign-up.html',
                 load: () => {
