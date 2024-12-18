@@ -1,4 +1,5 @@
 import {AuthUtils} from "../utils/auth-utils";
+import {HttpUtils} from "../utils/http-utils";
 
 export class Login {
     constructor(openNewRoute) {
@@ -36,37 +37,30 @@ export class Login {
     async login() {
         this.commonErrorElement.style.display = 'none';
         if (this.validateForm()) {
-            const response = await fetch('http://185.155.17.105:3000/api/login', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    email: this.emailElement.value,
-                    password: this.passwordElement.value,
-                    rememberMe: this.rememberMeElement.checked,
-                }),
+            const result = await HttpUtils.request('/login', 'POST', {
+                email: this.emailElement.value,
+                password: this.passwordElement.value,
+                rememberMe: this.rememberMeElement.checked,
             });
-            const result = await response.json();
-            if (result.error || !result.accessToken ||
-                !result.refreshToken || !result.id || !result.name) {
+
+            if (result.error || !result.response || (result.response && (!result.response.accessToken ||
+                !result.response.refreshToken || !result.response.id || !result.response.name))) {
                 this.commonErrorElement.style.display = 'block';
-                if (result.message) {
-                    this.commonErrorElement.innerText = result.message;
+                if (result.response.message) {
+                    this.commonErrorElement.innerText = result.response.message;
                 }
                 return;
 
             }
             if (this.rememberMeElement.checked) {
-                AuthUtils.setAuthInfo( result.accessToken, result.refreshToken,
-                    {id: result.id, name: result.name});
+                AuthUtils.setAuthInfo(result.response.accessToken, result.response.refreshToken,
+                    {id: result.response.id, name: result.response.name});
 
             } else {
                 // очистить localStorage, сохранить в sessionStorage
 
-                AuthUtils.setAuthInfo( result.accessToken, result.refreshToken,
-                    {id: result.id, name: result.name});
+                AuthUtils.setAuthInfo(result.response.accessToken, result.response.refreshToken,
+                    {id: result.response.id, name: result.response.name});
             }
             this.openNewRoute('/');
         } else {
