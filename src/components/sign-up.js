@@ -1,3 +1,5 @@
+import {AuthUtils} from "../utils/auth-utils";
+
 export class SignUp {
     constructor(openNewRoute) {
         this.openNewRoute = openNewRoute;
@@ -91,12 +93,8 @@ export class SignUp {
                 return;
 
             }
-            localStorage.setItem('accessToken', result.accessToken);
-            localStorage.setItem('refreshToken', result.refreshToken);
-            localStorage.setItem('userInfo', JSON.stringify({
-                id: result.id,
-                name: result.name
-            }));
+            AuthUtils.setAuthInfo( result.accessToken, result.refreshToken,
+                {id: result.id, name: result.name});
 
             console.log(result)
             this.openNewRoute('/');
