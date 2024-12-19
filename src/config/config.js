@@ -3,7 +3,7 @@ import host from "./local_config";
 
 const config = {
     api: host + '/api',
-    url_server: host,
+    host: host,
     freelancerLevels: {
         junior: 'junior',
         middle: 'middle',

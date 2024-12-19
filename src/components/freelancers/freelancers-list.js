@@ -1,5 +1,6 @@
 import {HttpUtils} from "../../utils/http-utils";
 import config from "../../config/config";
+import {CommonUtils} from "../../utils/common-utils";
 
 export class FreelancersList {
     constructor(openNewRoute) {
@@ -27,27 +28,10 @@ export class FreelancersList {
             const trElement = document.createElement('tr');
             trElement.insertCell().innerText = index + 1;
             trElement.insertCell().innerHTML = freelancer.avatar ?
-                `<img class="freelancer-avatar" src="${config.url_server}${freelancer.avatar}" alt="User photo">`: '';
+                `<img class="freelancer-avatar" src="${config.host}${freelancer.avatar}" alt="User photo">`: '';
             trElement.insertCell().innerText = freelancer.name + ' ' + freelancer.lastName;
             trElement.insertCell().innerText = freelancer.email;
-
-            let levelHTML = null;
-            switch (freelancer.level) {
-                case config.freelancerLevels.junior:
-                    levelHTML = `<span class="badge badge-info">Junior</span>`;
-                    break;
-                case config.freelancerLevels.middle:
-                    levelHTML = `<span class="badge badge-warning">Middle</span>`;
-                    break;
-                case config.freelancerLevels.senior:
-                    levelHTML = `<span class="badge badge-success">Senior</span>`;
-                    break;
-                default:
-                    levelHTML = `<span class="badge badge-secondary">Unknown</span>`;
-            }
-            trElement.insertCell().innerHTML = levelHTML;
-
-
+            trElement.insertCell().innerHTML = CommonUtils.getLevelHtml(freelancer.level);
             trElement.insertCell().innerText = freelancer.education;
             trElement.insertCell().innerText = freelancer.location;
             trElement.insertCell().innerText = freelancer.skills;
