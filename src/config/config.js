@@ -1,8 +1,17 @@
-import api_server from "./local_config";
+import host from "./local_config";
 
 
 const config = {
-    api: api_server,
+    api: host + '/api',
+    url_server: host,
+    freelancerLevels: {
+        junior: 'junior',
+        middle: 'middle',
+        senior: 'senior',
+    }
 }
+
+
+
 
 export default config;
