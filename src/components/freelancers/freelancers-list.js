@@ -53,9 +53,9 @@ export class FreelancersList {
             trElement.insertCell().innerText = freelancer.skills;
             trElement.insertCell().innerHTML =
                 '<div class="freelancer-tools">' +
-                '<a href="/freelansers/view?id=' + freelancer.id + '" class="fas fa-eye" title="Просмотр"></a>' +
-                '<a href="/freelansers/edit?id=' + freelancer.id + '" class="fas fa-edit" title="Редактирование"></a>' +
-                '<a href="/freelansers/delete?id=' + freelancer.id + '" class="fas fa-trash" title="Удаление"></a>' +
+                '<a href="/freelancers/view?id=' + freelancer.id + '" class="fas fa-eye" title="Просмотр"></a>' +
+                '<a href="/freelancers/edit?id=' + freelancer.id + '" class="fas fa-edit" title="Редактирование"></a>' +
+                '<a href="/freelancers/delete?id=' + freelancer.id + '" class="fas fa-trash" title="Удаление"></a>' +
                 '</div>';
 
             this.recordsElement.appendChild(trElement);
