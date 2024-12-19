@@ -44,7 +44,14 @@ export class HttpUtils {
                     // 1 - токена нет
                     result.redirect = '/login';
                 } else {
-                    // 2 - токен устарел
+                    // 2 - токен устарел / невалидный
+                    const updateTokenResult = await AuthUtils.updateRefreshToken()
+                    if (updateTokenResult) {
+                        // запрос повторно
+                        return this.request(url, method, useAuth, body);
+                    } else {
+                        result.redirect = '/login';
+                    }
                 }
             }
         }
