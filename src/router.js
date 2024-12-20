@@ -5,6 +5,7 @@ import {Logout} from "./components/auth/logout";
 import {FreelancersList} from "./components/freelancers/freelancers-list";
 import {FileUtils} from "./utils/file-utils";
 import {FreelancersView} from "./components/freelancers/freelancers-view";
+import {FreelancersCreate} from "./components/freelancers/freelancers-create";
 
 export class Router {
     constructor() {
@@ -80,14 +81,13 @@ export class Router {
             },
             {
                 route: '/freelancers/create',
-                title: 'Фрилансер',
-                filePathTemplate: '/templates/pages/freelancers/view.html',
+                title: 'Создание фрилансера',
+                filePathTemplate: '/templates/pages/freelancers/create.html',
                 useLayout: '/templates/layout.html',
                 load: () => {
-                    new FreelancersView()
+                    new FreelancersCreate(this.openNewRoute.bind(this))
                 },
-                styles: [],
-                scripts: []
+                scripts: ['bs-custom-file-input.min.js']
             },
             {
                 route: '/freelancers/view',
@@ -96,9 +96,7 @@ export class Router {
                 useLayout: '/templates/layout.html',
                 load: () => {
                     new FreelancersView(this.openNewRoute.bind(this))
-                },
-                styles: [],
-                scripts: []
+                }
             },
         ]
     }
@@ -167,7 +165,7 @@ export class Router {
                 })
             }
 
-            if (newRoute.scripts && newRoute.styles.length > 0) {
+            if (newRoute.scripts && newRoute.scripts.length > 0) {
                 for (const script of newRoute.scripts) {
                     await FileUtils.loadPageScript('/js/' + script);
                 }
