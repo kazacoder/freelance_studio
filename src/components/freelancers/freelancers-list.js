@@ -6,7 +6,6 @@ export class FreelancersList {
     constructor(openNewRoute) {
         this.recordsElement = document.getElementById('records')
         this.openNewRoute = openNewRoute;
-        console.log('FreelancersList');
         this.getFreelancers().then()
     }
 
@@ -23,7 +22,6 @@ export class FreelancersList {
     }
 
     showRecords (freelancers) {
-        console.log(freelancers)
         freelancers.forEach((freelancer, index) => {
             const trElement = document.createElement('tr');
             trElement.insertCell().innerText = index + 1;
@@ -56,9 +54,6 @@ export class FreelancersList {
                 },
             },
             "paging": true,
-            // "bDestroy": true,
-
         });
-
     }
 }

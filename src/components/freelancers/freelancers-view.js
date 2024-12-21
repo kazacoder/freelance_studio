@@ -24,7 +24,6 @@ export class FreelancersView {
             console.log(result.response.message);
             return alert('Возникла ошибка при запросе фрилансера. Обратитесь в поддержку');
         }
-        console.log(result.response);
         this.showFreelancer(result.response)
     }
 
@@ -45,19 +44,4 @@ export class FreelancersView {
                 .toLocaleString('ru-RU');
         }
     }
-}
-
-const fr = {
-    avatar: "/images/freelancers/avatars/1.jpg",
-    createdAt: "2024-12-16T13:21:17.188Z",
-    education: "Бакалавр информатики",
-    email: "ivan.ivanov@example.com",
-    id: "6760294df68dbe470a2e5a05",
-    info: "Разработчик JavaScript с опытом работы 2 года, специализирующийся на React и фронтенд разработке.",
-    lastName: "Иванов",
-    level: "junior",
-    location: "Москва, Россия",
-    name: "Иван",
-    skills: "JavaScript, React",
-    updatedAt: "2024-12-16T13:21:17.188Z",
 }
