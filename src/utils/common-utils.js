@@ -18,4 +18,25 @@ export class CommonUtils {
         }
         return levelHTML;
     }
+
+    static getStatusInfoHtml(status) {
+        let levelHTML = null;
+        switch (status) {
+            case config.orderStatuses.new:
+                levelHTML = `<span class="badge badge-secondary">Новый</span>`;
+                break;
+            case config.orderStatuses.success:
+                levelHTML = `<span class="badge badge-success">Выполнен</span>`;
+                break;
+            case config.orderStatuses.confirmed:
+                levelHTML = `<span class="badge badge-info">Подтвержден</span>`;
+                break;
+            case config.orderStatuses.canceled:
+                levelHTML = `<span class="badge badge-danger">Отменен</span>`;
+                break;
+            default:
+                levelHTML = `<span class="badge badge-secondary">Неизвестно</span>`;
+        }
+        return levelHTML;
+    }
 }
