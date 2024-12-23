@@ -30,7 +30,12 @@ export class OrdersList {
                 `<a href="/freelancers/view?id=${order.freelancer.id}">${order.freelancer.name + ' ' + order.freelancer.lastName}</a>`
             trElement.insertCell().innerText = new Date(order.scheduledDate).toLocaleString('ru-RU');
             trElement.insertCell().innerText = new Date(order.deadlineDate).toLocaleString('ru-RU');
-            trElement.insertCell().innerHTML = CommonUtils.getStatusInfoHtml(order.status);
+
+            const statusInfo = CommonUtils.getStatusInfoHtml(order.status)
+            trElement.insertCell().innerHTML = `<span class="badge badge-${statusInfo.color}">${statusInfo.name}</span>`;
+            // trElement.insertCell().innerHTML = CommonUtils.getStatusInfoHtml(order.status);
+
+
             if (order.completeDate) {
                 trElement.insertCell().innerText = new Date(order.completeDate).toLocaleString('ru-RU');
             }  else trElement.insertCell().innerText = ''
