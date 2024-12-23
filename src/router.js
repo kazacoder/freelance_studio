@@ -79,8 +79,12 @@ export class Router {
                 load: () => {
                     new FreelancersList(this.openNewRoute.bind(this))
                 },
+                includes: ['/templates/includes/delete-modal.html'],
+                unload: () => {
+                    document.getElementById('includes').remove()
+                },
                 styles: ['dataTables.bootstrap4.min.css'],
-                scripts: ['jquery.dataTables.min.js', 'dataTables.bootstrap4.min.js']
+                scripts: ['jquery.dataTables.min.js', 'dataTables.bootstrap4.min.js', 'bootstrap.bundle.min.js']
             },
             {
                 route: '/freelancers/create',
@@ -99,7 +103,12 @@ export class Router {
                 useLayout: '/templates/layout.html',
                 load: () => {
                     new FreelancersView(this.openNewRoute.bind(this))
-                }
+                },
+                includes: ['/templates/includes/delete-modal.html'],
+                unload: () => {
+                    document.getElementById('includes').remove()
+                },
+                scripts: ['bootstrap.bundle.min.js']
             },
             {
                 route: '/freelancers/edit',
@@ -192,6 +201,15 @@ export class Router {
             if (newRoute.styles && newRoute.styles.length > 0) {
                 newRoute.styles.forEach(style => {
                     FileUtils.loadPageStyle('/css/' + style, this.adminlteStyleElement)
+                })
+            }
+
+            if (newRoute.includes && newRoute.includes.length > 0) {
+                const includesDiv = document.createElement('div')
+                includesDiv.id = 'includes'
+                document.body.append(includesDiv)
+                newRoute.includes.forEach(include => {
+                    FileUtils.loadIncludes(include, includesDiv)
                 })
             }
 

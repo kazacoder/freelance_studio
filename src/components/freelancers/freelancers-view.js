@@ -12,7 +12,7 @@ export class FreelancersView {
         }
         this.getFreelancer(id).then()
         document.getElementById('edit-link').href += id;
-        document.getElementById('delete-link').href += id;
+        document.getElementById('delete-link').href = "/freelancers/delete?id=" + id;
     }
 
     async getFreelancer(id) {

@@ -37,12 +37,17 @@ export class FreelancersList {
                 '<div class="freelancer-tools">' +
                 '<a href="/freelancers/view?id=' + freelancer.id + '" class="fas fa-eye" title="Просмотр"></a>' +
                 '<a href="/freelancers/edit?id=' + freelancer.id + '" class="fas fa-edit" title="Редактирование"></a>' +
-                '<a href="/freelancers/delete?id=' + freelancer.id + '" class="fas fa-trash" title="Удаление"></a>' +
+                '<a href="#" class="fas fa-trash delete-item" delete-link="/freelancers/delete?id=' + freelancer.id + '" title="Удаление" data-toggle="modal" data-target="#modal-danger"></a>' +
+                // '<a href="/freelancers/delete?id=' + freelancer.id + '" class="fas fa-trash" title="Удаление"></a>'
                 '</div>';
-
             this.recordsElement.appendChild(trElement);
 
         });
+        document.querySelectorAll('.delete-item').forEach(element => {
+            element.addEventListener('click', () => {
+                document.getElementById('delete-link').href = element.getAttribute('delete-link');
+            });
+        })
         new DataTable('#data-table', {
             language: {
                 "lengthMenu": "Показывать _MENU_ записей на странице",

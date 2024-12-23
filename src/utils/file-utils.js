@@ -25,4 +25,12 @@ export class FileUtils {
             reader.onerror = () => reject(new Error('Can not convert this file'));
         });
     }
+
+    static async loadIncludes(src, includesDiv) {
+        console.log(src);
+        const srcHtml = await fetch(src).then(response => response.text());
+        const srcNewDiv = document.createElement('div');
+        srcNewDiv.innerHTML = srcHtml;
+        includesDiv.appendChild(srcNewDiv)
+    }
 }
