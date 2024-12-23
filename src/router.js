@@ -10,6 +10,7 @@ import {FreelancersEdit} from "./components/freelancers/freelancers-edit";
 import {FreelancersDelete} from "./components/freelancers/freelancers-delete";
 import {OrdersList} from "./components/orders/orders-list";
 import {OrdersView} from "./components/orders/orders-view";
+import {OrdersCreate} from "./components/orders/orders-create";
 
 export class Router {
     constructor() {
@@ -155,6 +156,17 @@ export class Router {
                     document.getElementById('includes').remove()
                 },
                 scripts: ['bootstrap.bundle.min.js']
+            },
+            {
+                route: '/orders/create',
+                title: 'Создание заказа',
+                filePathTemplate: '/templates/pages/orders/create.html',
+                useLayout: '/templates/layout.html',
+                load: () => {
+                    new OrdersCreate(this.openNewRoute.bind(this))
+                },
+                styles: ['tempusdominus-bootstrap-4.min.css'],
+                scripts: ['moment.min.js', 'moment-ru-locale.js', 'tempusdominus-bootstrap-4.min.js']
             },
         ]
     }
