@@ -4,7 +4,8 @@
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1>Создать новый заказ</h1>
-                    <div id="common-error" class="error invalid-feedback text-center mb-3" >Ошибка обращения к серверу</div>
+                    <div id="common-error" class="error invalid-feedback text-center mb-3">Ошибка обращения к серверу
+                    </div>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -28,14 +29,15 @@
                         <div class="form-group row">
                             <label for="amountInput" class="col-sm-2 col-form-label">Сумма</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="amountInput" placeholder="Сумма">
-                                <span id="amountInput-error" class="error invalid-feedback">Заполните поле</span>
+                                <input type="number" class="form-control" id="amountInput" placeholder="Сумма">
+                                <span id="amountInput-error" class="error invalid-feedback">Введите число</span>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="descriptionInput" class="col-sm-2 col-form-label">Описание</label>
                             <div class="col-sm-10">
-                                <textarea id="descriptionInput" class="form-control" rows=2" placeholder="Описание"></textarea>
+                                <textarea id="descriptionInput" class="form-control" rows=2"
+                                          placeholder="Описание"></textarea>
                                 <span id="descriptionInput-error" class="error invalid-feedback">Заполните поле</span>
                             </div>
                         </div>
@@ -53,14 +55,14 @@
                         <div class="form-group row">
                             <label for="freelancerSelect" class="col-sm-2 col-form-label">Исполнитель</label>
                             <div class="col-sm-10">
-                                <select class="form-control" id="freelancerSelect">
+                                <select class="form-control select2" id="freelancerSelect">
                                 </select>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-sm-4">
-                                <div class="card bg-gradient-info">
+                                <div class="card bg-gradient-info" id="scheduled-card">
                                     <div class="card-header border-0">
                                         <h3 class="card-title">
                                             <i class="far fa-calendar-alt"></i>
@@ -71,14 +73,42 @@
                                         <div id="calendar-scheduled" style="width: 100%"></div>
                                     </div>
                                 </div>
+                                <span id="scheduled-card-error" class="error invalid-feedback text-center">
+                                    Выберите дату
+                                </span>
                             </div>
-                            <div class="col-sm-4"></div>
-                            <div class="col-sm-4"></div>
-
+                            <div class="col-sm-4">
+                                <div class="card bg-gradient-success">
+                                    <div class="card-header border-0">
+                                        <h3 class="card-title">
+                                            <i class="far fa-calendar-alt"></i>
+                                            Дата исполнения (не обязательно)
+                                        </h3>
+                                    </div>
+                                    <div class="card-body pt-0">
+                                        <div id="calendar-complete" style="width: 100%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="card bg-gradient-warning" id="deadline-card">
+                                    <div class="card-header border-0">
+                                        <h3 class="card-title">
+                                            <i class="far fa-calendar-alt"></i>
+                                            Дата дедлайна
+                                        </h3>
+                                    </div>
+                                    <div class="card-body pt-0">
+                                        <div id="calendar-deadline" style="width: 100%"></div>
+                                    </div>
+                                </div>
+                                <span id="deadline-card-error" class="error invalid-feedback text-center">
+                                    Выберите дату
+                                </span>
+                            </div>
                         </div>
-
                         <div class="form-group row">
-                            <div class="offset-sm-2 col-sm-10">
+                            <div class="w-100 text-center">
                                 <button type="button" class="btn btn-danger" id="saveButton">Сохранить</button>
                             </div>
                         </div>
@@ -87,9 +117,6 @@
             </div>
 
         </div>
-
-
-
 
 
     </section>

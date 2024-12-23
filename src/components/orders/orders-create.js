@@ -1,49 +1,111 @@
 import {HttpUtils} from "../../utils/http-utils";
-import {FileUtils} from "../../utils/file-utils";
 
 export class OrdersCreate {
     constructor(openNewRoute) {
         this.openNewRoute = openNewRoute;
         this.inputs = {}
-        $('#calendar-scheduled').datetimepicker({
-            // format: 'L',
+        const calendarScheduled = $('#calendar-scheduled');
+        const calendarDeadline = $('#calendar-deadline');
+        const calendarComplete = $('#calendar-complete');
+        this.scheduledDate = null;
+        this.deadlineDate = null;
+        this.completeDate = null;
+
+        calendarScheduled.datetimepicker({
             inline: true,
             locale: 'ru',
             icons: {
                 time: 'far fa-clock',
             },
+            useCurrent: false,
+        });
+        calendarScheduled.on('change.datetimepicker', (e) => {
+            this.scheduledDate = e.date
+        });
+
+        calendarComplete.datetimepicker({
+            inline: true,
+            locale: 'ru',
+            icons: {
+                time: 'far fa-clock',
+            },
+            useCurrent: false,
+            buttons: {
+                showClear: true,
+            }
+        });
+        calendarComplete.on('change.datetimepicker', (e) => {
+            this.completeDate = e.date
+        });
+
+        calendarDeadline.datetimepicker({
+            inline: true,
+            locale: 'ru',
+            icons: {
+                time: 'far fa-clock',
+            },
+            useCurrent: false,
+        });
+        calendarDeadline.on('change.datetimepicker', (e) => {
+            this.deadlineDate = e.date
         })
 
-        // this.commonErrorElement = document.getElementById('common-error');
-        // document.querySelectorAll('input, textarea, select').forEach(el => {
-        //     this.inputs[el.id + 'Element'] = el;
-        // })
-        // this.textInputsArray = Object.values(this.inputs).filter(el => el.type === 'text' || el.type === 'textarea')
-        // document.getElementById('saveButton').addEventListener('click', this.saveFreelancers.bind(this));
+        this.getFreelancers().then()
+
+        this.commonErrorElement = document.getElementById('common-error');
+        this.freelancerSelectElement = document.getElementById('freelancerSelect');
+        this.amountInputElement = document.getElementById('amountInput');
+        this.descriptionInputElement = document.getElementById('descriptionInput');
+        this.statusSelectElement = document.getElementById('statusSelect');
+
+        document.getElementById('saveButton').addEventListener('click', this.saveOrder.bind(this));
 
     }
 
+    async getFreelancers() {
+        const result = await HttpUtils.request('/freelancers');
+        if (result.redirect) {
+            return this.openNewRoute(result.redirect);
+        }
+        if (result.error || !result.response ||
+            (result.response && (result.response.error || !result.response.freelancers))) {
+            return alert('Возникла ошибка при запросе фрилансеров. Обратитесь в поддержку');
+        }
 
-    async saveFreelancers(e) {
+        const freelancers = result.response.freelancers;
+
+        freelancers.forEach(freelancer => {
+            const option = document.createElement("option");
+            option.value = freelancer.id;
+            option.innerText = `${freelancer.name} ${freelancer.lastName}`;
+            this.freelancerSelectElement.appendChild(option);
+        });
+
+        $(this.freelancerSelectElement).select2({
+            theme: 'bootstrap4'
+        });
+    }
+
+
+    async saveOrder(e) {
         this.commonErrorElement.style.display = 'none';
         e.preventDefault();
         if (this.validateForm()) {
+
             const createData = {
-                name: this.inputs.nameInputElement.value,
-                lastName: this.inputs.lastNameInputElement.value,
-                email: this.inputs.emailInputElement.value,
-                level: this.inputs.levelSelectElement.value,
-                education: this.inputs.educationInputElement.value,
-                location: this.inputs.locationInputElement.value,
-                skills: this.inputs.skillsInputElement.value,
-                info: this.inputs.infoInputElement.value,
+                description: this.descriptionInputElement.value,
+                deadlineDate: this.deadlineDate.toISOString(),
+                scheduledDate: this.scheduledDate.toISOString(),
+                freelancer: this.freelancerSelectElement.value,
+                status: this.statusSelectElement.value,
+                amount: parseInt(this.amountInputElement.value),
+            };
+
+            if (this.completeDate) {
+                createData.completeDate = this.completeDate.toISOString();
             }
 
-            if (this.inputs.avatarInputElement.files && this.inputs.avatarInputElement.files.length > 0) {
-                createData.avatarBase64 = await FileUtils.convertFileToBase64(this.inputs.avatarInputElement.files[0])
-            }
-
-            const result = await HttpUtils.request('/freelancers', 'POST', true, createData);
+            const result = await HttpUtils.request('/orders', 'POST', true, createData);
 
             if (result.redirect) {
                 this.openNewRoute(result.redirect);
@@ -56,7 +118,7 @@ export class OrdersCreate {
                 }
                 return;
             }
-            return this.openNewRoute("/freelancers/view?id=" + result.response.id);
+            return this.openNewRoute("/orders/view?id=" + result.response.id);
         } else {
             console.log('INVALID')
         }
@@ -66,22 +128,38 @@ export class OrdersCreate {
     validateForm() {
         let isValid = true
 
-        if (this.inputs.emailInputElement.value && this.inputs.emailInputElement.value.match(/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/)) {
-            this.inputs.emailInputElement.classList.remove('is-invalid');
+        if (this.amountInputElement.value.match(/^\d+$/)) {
+            this.amountInputElement.classList.remove('is-invalid');
         } else {
-            this.inputs.emailInputElement.classList.add('is-invalid');
+            this.amountInputElement.classList.add('is-invalid')
             isValid = false;
         }
 
-        this.textInputsArray.forEach((el) => {
-            if (el.value) {
-                el.classList.remove('is-invalid');
-            } else {
-                el.classList.add('is-invalid');
-                isValid = false;
-            }
-        })
+        if (this.descriptionInputElement.value) {
+            this.descriptionInputElement.classList.remove('is-invalid');
+        } else {
+            this.descriptionInputElement.classList.add('is-invalid')
+            isValid = false;
+        }
 
+        const scheduledCardElement = document.getElementById('scheduled-card');
+        if (this.scheduledDate) {
+            scheduledCardElement.classList.remove('is-invalid');
+        } else {
+            scheduledCardElement.classList.add('is-invalid');
+            isValid = false;
+        }
+
+        const deadlineCardElement = document.getElementById('deadline-card');
+        if (this.deadlineDate) {
+            deadlineCardElement.classList.remove('is-invalid');
+        } else {
+            deadlineCardElement.classList.add('is-invalid');
+            isValid = false;
+        }
+
+        console.log(this.scheduledDate)
+        console.log(this.deadlineDate)
         return isValid;
     }
 }
