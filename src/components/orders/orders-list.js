@@ -33,7 +33,6 @@ export class OrdersList {
 
             const statusInfo = CommonUtils.getStatusInfoHtml(order.status)
             trElement.insertCell().innerHTML = `<span class="badge badge-${statusInfo.color}">${statusInfo.name}</span>`;
-            // trElement.insertCell().innerHTML = CommonUtils.getStatusInfoHtml(order.status);
 
 
             if (order.completeDate) {
@@ -43,12 +42,20 @@ export class OrdersList {
                 '<div class="order-tools">' +
                 '<a href="/orders/view?id=' + order.id + '" class="fas fa-eye" title="Просмотр"></a>' +
                 '<a href="/orders/edit?id=' + order.id + '" class="fas fa-edit" title="Редактирование"></a>' +
-                '<a href="/orders/delete?id=' + order.id + '" class="fas fa-trash" title="Удаление"></a>' +
+                '<a href="#" class="fas fa-trash delete-item" delete-link="/orders/delete?id=' + order.id + '" title="Удаление" data-toggle="modal" data-target="#modal-danger"></a>' +
+                // '<a href="/orders/delete?id=' + order.id + '" class="fas fa-trash" title="Удаление"></a>' +
                 '</div>';
 
             this.recordsElement.appendChild(trElement);
 
         });
+
+        document.querySelectorAll('.delete-item').forEach(element => {
+            element.addEventListener('click', () => {
+                document.getElementById('delete-link').href = element.getAttribute('delete-link');
+            });
+        })
+
         new DataTable('#data-table', {
             language: {
                 "lengthMenu": "Показывать _MENU_ записей на странице",

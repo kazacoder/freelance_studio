@@ -135,8 +135,12 @@ export class Router {
                 load: () => {
                     new OrdersList(this.openNewRoute.bind(this))
                 },
+                includes: ['/templates/includes/delete-modal.html'],
+                unload: () => {
+                    document.getElementById('includes').remove()
+                },
                 styles: ['dataTables.bootstrap4.min.css'],
-                scripts: ['jquery.dataTables.min.js', 'dataTables.bootstrap4.min.js']
+                scripts: ['jquery.dataTables.min.js', 'dataTables.bootstrap4.min.js', 'bootstrap.bundle.min.js']
             },
             {
                 route: '/orders/view',

@@ -1,22 +1,22 @@
 import config from "../config/config";
 
 export class CommonUtils {
-    static getinfo(level) {
-        let info = null;
+    static getLevelHtml(level) {
+        let levelHTML = null;
         switch (level) {
             case config.freelancerLevels.junior:
-                info = `<span class="badge badge-info">Junior</span>`;
+                levelHTML = `<span class="badge badge-info">Junior</span>`;
                 break;
             case config.freelancerLevels.middle:
-                info = `<span class="badge badge-warning">Middle</span>`;
+                levelHTML = `<span class="badge badge-warning">Middle</span>`;
                 break;
             case config.freelancerLevels.senior:
-                info = `<span class="badge badge-success">Senior</span>`;
+                levelHTML = `<span class="badge badge-success">Senior</span>`;
                 break;
             default:
-                info = `<span class="badge badge-secondary">Unknown</span>`;
+                levelHTML = `<span class="badge badge-secondary">Unknown</span>`;
         }
-        return info;
+        return levelHTML;
     }
 
     static getStatusInfoHtml(status) {
