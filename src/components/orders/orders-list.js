@@ -18,7 +18,6 @@ export class OrdersList {
             return alert('Возникла ошибка при запросе фрилансеров. Обратитесь в поддержку');
         }
         this.showRecords(result.response.orders)
-        console.log(result.response.orders)
     }
 
     showRecords (orders) {
