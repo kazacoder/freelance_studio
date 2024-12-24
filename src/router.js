@@ -27,9 +27,10 @@ export class Router {
                 filePathTemplate: '/templates/pages/dashboard.html',
                 useLayout: '/templates/layout.html',
                 load: () => {
-                    new Dashboard()
+                    new Dashboard(this.openNewRoute.bind(this))
                 },
-                styles: [],
+                styles: ['fullcalendar.css'],
+                scripts: ['moment.min.js', 'fullcalendar.js', 'fullcalendar-ru-locale.js']
             },
             {
                 route: '/404',
