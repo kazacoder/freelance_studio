@@ -1,4 +1,4 @@
-import host from "./local_config";
+const host = process.env.HOST;
 
 const config = {
     api: host + '/api',

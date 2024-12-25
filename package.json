@@ -9,7 +9,6 @@
     "devser": "webpack serve --open",
     "http-server": "http-server ./dist -p 8080 --proxy http://localhost:8080?",
     "live-server": "live-server ./dist --port=8088 --entry-file=index.html"
-
   },
   "repository": {
     "type": "git",
@@ -36,6 +35,7 @@
     "webpack-dev-server": "^5.2.0"
   },
   "dependencies": {
-    "admin-lte": "3.2"
+    "admin-lte": "3.2",
+    "dotenv-webpack": "^8.1.0"
   }
 }

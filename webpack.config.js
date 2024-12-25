@@ -1,6 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const CopyPlugin = require("copy-webpack-plugin");
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
     entry: './src/app.js',
@@ -39,6 +40,7 @@ module.exports = {
             patterns: [
                 {from: "./src/templates", to: "templates"},
                 {from: "./src/static/images", to: "images"},
+                {from: "./src/site.webmanifest", to: "./"},
                 {from: "./node_modules/admin-lte/plugins/fontawesome-free/webfonts", to: "webfonts"},
                 {from: "./node_modules/admin-lte/plugins/fontawesome-free/css/all.min.css", to: "css"},
                 {from: "./node_modules/admin-lte/dist/css/adminlte.min.css", to: "css"},
@@ -60,8 +62,9 @@ module.exports = {
                 {from: "./node_modules/admin-lte/plugins/fullcalendar/main.js", to: "js/fullcalendar.js"},
                 {from: "./node_modules/admin-lte/plugins/fullcalendar/locales/ru.js", to: "js/fullcalendar-ru-locale.js"},
                 {from: "./node_modules/admin-lte/plugins/fullcalendar/main.css", to: "css/fullcalendar.css"},
+                {from: "./.env", to: "./"},
             ],
         }),
+        new Dotenv(),
     ],
-
 };
