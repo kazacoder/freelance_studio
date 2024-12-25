@@ -1,0 +1,106 @@
+<div class="freelancer-edit">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Создать нового фрилансера</h1>
+                    <div id="common-error" class="error invalid-feedback text-center mb-3" >Ошибка обращения к серверу</div>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/">Главная</a></li>
+                        <li class="breadcrumb-item"><a href="/freelancers">Фрилансеры</a></li>
+                        <li class="breadcrumb-item active">Создание</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Создание фрилансера</h3>
+                </div>
+                <form class="form-horizontal">
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <label for="nameInput" class="col-sm-2 col-form-label">Имя</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="nameInput" placeholder="Имя">
+                                <span id="nameInput-error" class="error invalid-feedback">Введите имя</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="lastNameInput" class="col-sm-2 col-form-label">Фамилия</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="lastNameInput" placeholder="Фамилия">
+                                <span id="lastNameInput-error" class="error invalid-feedback">Введите фамилию</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="emailInput" class="col-sm-2 col-form-label">E-mail</label>
+                            <div class="col-sm-10">
+                                <input type="email" class="form-control" id="emailInput" placeholder="Email">
+                                <span id="emailInput-error" class="error invalid-feedback">Введите корректный E-mail</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="educationInput" class="col-sm-2 col-form-label">Образование</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="educationInput" placeholder="Образование">
+                                <span id="educationInput-error" class="error invalid-feedback">Заполните поле</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="locationInput" class="col-sm-2 col-form-label">Местонахождение</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="locationInput" placeholder="Местонахождение">
+                                <span id="locationInput-error" class="error invalid-feedback">Заполните поле</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="skillsInput" class="col-sm-2 col-form-label">Навыки</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="skillsInput" placeholder="Навыки">
+                                <span id="skillsInput-error" class="error invalid-feedback">Заполните поле</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="infoInput" class="col-sm-2 col-form-label">Информация</label>
+                            <div class="col-sm-10">
+                                <textarea id="infoInput" class="form-control" rows=2" placeholder="Информация"></textarea>
+                                <span id="infoInput-error" class="error invalid-feedback">Заполните поле</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="levelSelect" class="col-sm-2 col-form-label">Уровень</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="levelSelect">
+                                    <option value="junior" selected>Junior</option>
+                                    <option value="middle">Middle</option>
+                                    <option value="senior">Senior</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="avatarInput" class="col-sm-2 col-form-label">Новый аватар</label>
+                            <div class="input-group col-sm-10">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="avatarInput">
+                                    <label class="custom-file-label" for="avatarInput">Выберите файл</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="offset-sm-2 col-sm-10">
+                                <button type="button" class="btn btn-danger" id="saveButton">Сохранить</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>
