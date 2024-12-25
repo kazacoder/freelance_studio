@@ -20,8 +20,7 @@ export class Dashboard {
         this.loadCalendarInfo(result.response.orders)
     }
 
-    loadOrdersInfo (orders) {
-        console.log(orders);
+    loadOrdersInfo(orders) {
         document.getElementById('count-orders').innerText = orders.length;
         document.getElementById('done-orders').innerText =
             orders.filter(order => order.status === config.orderStatuses.success).length;
@@ -31,75 +30,73 @@ export class Dashboard {
             orders.filter(order => order.status === config.orderStatuses.canceled).length;
     }
 
-    loadCalendarInfo () {
+    loadCalendarInfo(orders) {
         const preparedEvents = []
 
+        orders.forEach(order => {
+            let color = null
+            if (order.status === config.orderStatuses.success) {
+                color = 'gray'
+            }
+
+            if (order.scheduledDate) {
+                const scheduledDate = new Date(order.scheduledDate);
+                preparedEvents.push({
+                    title: `${order.freelancer.name} ${order.freelancer.lastName} выполняет заказ ${order.number}`,
+                    start: scheduledDate,
+                    backgroundColor: color ? color : '#00c0ef', //Info (aqua)
+                    borderColor: color ? color : '#00c0ef', //Info (aqua)
+                    allDay: true,
+                })
+            }
+
+            if (order.deadlineDate) {
+                const deadlineDate = new Date(order.deadlineDate);
+                preparedEvents.push({
+                    title: `Дедлайн заказа ${order.number}`,
+                    start: deadlineDate,
+                    backgroundColor: color ? color : '#f39c12', //yellow
+                    borderColor: color ? color : '#f39c12', //yellow
+                    allDay: true,
+                })
+            }
+
+            if (order.completeDate) {
+                const completeDate = new Date(order.completeDate);
+                preparedEvents.push({
+                    title: `Заказ ${order.number} выполнен фрилансером ${order.freelancer.name}`,
+                    start: completeDate,
+                    backgroundColor: '#00a65a', //Success (green)
+                    borderColor: '#00a65a', //Success (green)
+                    allDay: true,
+                })
+            }
+        })
+
         const calendarElement = document.getElementById('calendar')
-        var date = new Date()
-        var d    = date.getDate(),
-            m    = date.getMonth(),
-            y    = date.getFullYear()
-
-
         const calendar = new FullCalendar.Calendar(calendarElement, {
                 headerToolbar: {
-                    left  : 'prev,next today',
+                    left: 'prev,next today',
                     center: 'title',
-                    right : ''
+                    right: ''
                 },
                 themeSystem: 'bootstrap',
                 locale: 'ru',
-                //Random default events
-                events: [
-                    {
-                        title          : 'All Day Event',
-                        start          : new Date(y, m, 1),
-                        backgroundColor: '#f56954', //red
-                        borderColor    : '#f56954', //red
-                        allDay         : true
-                    },
-                    {
-                        title          : 'Long Event',
-                        start          : new Date(y, m, d - 5),
-                        end            : new Date(y, m, d - 2),
-                        backgroundColor: '#f39c12', //yellow
-                        borderColor    : '#f39c12' //yellow
-                    },
-                    {
-                        title          : 'Meeting',
-                        start          : new Date(y, m, d, 10, 30),
-                        allDay         : false,
-                        backgroundColor: '#0073b7', //Blue
-                        borderColor    : '#0073b7' //Blue
-                    },
-                    {
-                        title          : 'Lunch',
-                        start          : new Date(y, m, d, 12, 0),
-                        end            : new Date(y, m, d, 14, 0),
-                        allDay         : false,
-                        backgroundColor: '#00c0ef', //Info (aqua)
-                        borderColor    : '#00c0ef' //Info (aqua)
-                    },
-                    {
-                        title          : 'Birthday Party',
-                        start          : new Date(y, m, d + 1, 19, 0),
-                        end            : new Date(y, m, d + 1, 22, 30),
-                        allDay         : false,
-                        backgroundColor: '#00a65a', //Success (green)
-                        borderColor    : '#00a65a' //Success (green)
-                    },
-                    {
-                        title          : 'Click for Google',
-                        start          : new Date(y, m, 28),
-                        end            : new Date(y, m, 29),
-                        url            : 'https://www.google.com/',
-                        backgroundColor: '#3c8dbc', //Primary (light-blue)
-                        borderColor    : '#3c8dbc' //Primary (light-blue)
-                    }
-                ],
+                events: preparedEvents,
             }
         )
         calendar.render();
-
     }
 }
+
+const colors =
+    {
+        backgroundColor: '',
+        borderColor: '',
+        red: '#f56954', //red
+        yellow: '#f39c12', //yellow
+        Blue: '#0073b7', //Blue
+        Info: '#00c0ef', //Info (aqua)
+        Success: '#00a65a', //Success (green)
+        Primary: '#3c8dbc', //Primary (light-blue)
+    }

@@ -282,6 +282,7 @@ export class Router {
                     contentBlock = document.getElementById('content-layout')
                     document.body.classList.add('sidebar-mini');
                     document.body.classList.add('layout-fixed');
+                    this.activateMenuItem(newRoute)
                 } else {
                     document.body.classList.remove('sidebar-mini');
                     document.body.classList.remove('layout-fixed');
@@ -297,5 +298,15 @@ export class Router {
             history.pushState(null, '', '/404');
             await this.activateRoute();
         }
+    }
+
+    activateMenuItem (route) {
+        const menuItems = document.querySelectorAll('.sidebar .nav-link')
+        menuItems.forEach(menuItem => {
+            const href = menuItem.getAttribute('href')
+            if (route.route.includes(href) && '/' !== href || (route.route === '/' && href === '/')) {
+                menuItem.classList.add('active');
+            } else menuItem.classList.remove('active')
+        })
     }
 }
