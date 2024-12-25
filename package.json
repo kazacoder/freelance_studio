@@ -5,8 +5,11 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack --mode development",
-    "build": "webpack --mode production",
-    "devser": "webpack serve --open"
+    "build": "webpack",
+    "devser": "webpack serve --open",
+    "http-server": "http-server ./dist -p 8080 --proxy http://localhost:8080?",
+    "live-server": "live-server ./dist --port=8088 --entry-file=index.html"
+
   },
   "repository": {
     "type": "git",
@@ -23,6 +26,8 @@
     "copy-webpack-plugin": "^12.0.2",
     "css-loader": "^7.1.2",
     "html-webpack-plugin": "^5.6.3",
+    "http-server": "^14.1.1",
+    "live-server": "^1.2.2",
     "sass": "^1.83.0",
     "sass-loader": "^16.0.4",
     "style-loader": "^4.0.0",
