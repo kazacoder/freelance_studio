@@ -1,9 +1,9 @@
 import {HttpUtils} from "../../utils/http-utils";
+import {ValidationUtils} from "../../utils/validation-utils";
 
 export class OrdersCreate {
     constructor(openNewRoute) {
         this.openNewRoute = openNewRoute;
-        this.inputs = {}
         const calendarScheduled = $('#calendar-scheduled');
         const calendarDeadline = $('#calendar-deadline');
         const calendarComplete = $('#calendar-complete');
@@ -57,7 +57,8 @@ export class OrdersCreate {
         this.amountInputElement = document.getElementById('amountInput');
         this.descriptionInputElement = document.getElementById('descriptionInput');
         this.statusSelectElement = document.getElementById('statusSelect');
-
+        this.scheduledCardElement = document.getElementById('scheduled-card');
+        this.deadlineCardElement = document.getElementById('deadline-card');
         document.getElementById('saveButton').addEventListener('click', this.saveOrder.bind(this));
 
     }
@@ -90,8 +91,15 @@ export class OrdersCreate {
     async saveOrder(e) {
         this.commonErrorElement.style.display = 'none';
         e.preventDefault();
-        if (this.validateForm()) {
 
+        const validations =[
+            {element: this.descriptionInputElement},
+            {element: this.scheduledCardElement, options: {checkProperty: this.scheduledDate}},
+            {element: this.deadlineCardElement, options: {checkProperty: this.deadlineDate}},
+            {element: this.amountInputElement, options: {pattern: /^\d+$/}},
+        ]
+
+        if (ValidationUtils.validateForm(validations)) {
             const createData = {
                 description: this.descriptionInputElement.value,
                 deadlineDate: this.deadlineDate.toISOString(),
@@ -123,43 +131,5 @@ export class OrdersCreate {
             console.log('INVALID')
         }
 
-    }
-
-    validateForm() {
-        let isValid = true
-
-        if (this.amountInputElement.value.match(/^\d+$/)) {
-            this.amountInputElement.classList.remove('is-invalid');
-        } else {
-            this.amountInputElement.classList.add('is-invalid')
-            isValid = false;
-        }
-
-        if (this.descriptionInputElement.value) {
-            this.descriptionInputElement.classList.remove('is-invalid');
-        } else {
-            this.descriptionInputElement.classList.add('is-invalid')
-            isValid = false;
-        }
-
-        const scheduledCardElement = document.getElementById('scheduled-card');
-        if (this.scheduledDate) {
-            scheduledCardElement.classList.remove('is-invalid');
-        } else {
-            scheduledCardElement.classList.add('is-invalid');
-            isValid = false;
-        }
-
-        const deadlineCardElement = document.getElementById('deadline-card');
-        if (this.deadlineDate) {
-            deadlineCardElement.classList.remove('is-invalid');
-        } else {
-            deadlineCardElement.classList.add('is-invalid');
-            isValid = false;
-        }
-
-        console.log(this.scheduledDate)
-        console.log(this.deadlineDate)
-        return isValid;
     }
 }

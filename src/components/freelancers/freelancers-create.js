@@ -1,5 +1,6 @@
 import {HttpUtils} from "../../utils/http-utils";
 import {FileUtils} from "../../utils/file-utils";
+import {ValidationUtils} from "../../utils/validation-utils";
 
 export class FreelancersCreate {
     constructor(openNewRoute) {
@@ -11,6 +12,17 @@ export class FreelancersCreate {
             this.inputs[el.id + 'Element'] = el;
         })
         this.textInputsArray = Object.values(this.inputs).filter(el => el.type === 'text' || el.type === 'textarea')
+        this.validations = [{
+            element: this.inputs.emailInputElement,
+            options: {
+                pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
+            }
+        }]
+        this.textInputsArray.forEach(el => {
+            this.validations.push({
+                element: el,
+            })
+        })
         document.getElementById('saveButton').addEventListener('click', this.saveFreelancers.bind(this));
 
     }
@@ -19,7 +31,7 @@ export class FreelancersCreate {
     async saveFreelancers(e) {
         this.commonErrorElement.style.display = 'none';
         e.preventDefault();
-        if (this.validateForm()) {
+        if (ValidationUtils.validateForm(this.validations)) {
             const createData = {
                 name: this.inputs.nameInputElement.value,
                 lastName: this.inputs.lastNameInputElement.value,
@@ -53,27 +65,5 @@ export class FreelancersCreate {
             console.log('INVALID')
         }
 
-    }
-
-    validateForm() {
-        let isValid = true
-
-        if (this.inputs.emailInputElement.value && this.inputs.emailInputElement.value.match(/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/)) {
-            this.inputs.emailInputElement.classList.remove('is-invalid');
-        } else {
-            this.inputs.emailInputElement.classList.add('is-invalid');
-            isValid = false;
-        }
-
-        this.textInputsArray.forEach((el) => {
-            if (el.value) {
-                el.classList.remove('is-invalid');
-            } else {
-                el.classList.add('is-invalid');
-                isValid = false;
-            }
-        })
-
-        return isValid;
     }
 }

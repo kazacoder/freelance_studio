@@ -1,6 +1,7 @@
 import {HttpUtils} from "../../utils/http-utils";
 import config from "../../config/config";
 import {CommonUtils} from "../../utils/common-utils";
+import {ValidationUtils} from "../../utils/validation-utils";
 
 export class OrdersEdit {
     constructor(openNewRoute) {
@@ -17,7 +18,10 @@ export class OrdersEdit {
         this.amountInputElement = document.getElementById('amountInput');
         this.descriptionInputElement = document.getElementById('descriptionInput');
         this.statusSelectElement = document.getElementById('statusSelect');
-
+        this.validations =[
+            {element: this.descriptionInputElement},
+            {element: this.amountInputElement, options: {pattern: /^\d+$/}},
+        ]
         this.orderOriginalData = {}
 
         this.calendarScheduled = $('#calendar-scheduled');
@@ -122,7 +126,7 @@ export class OrdersEdit {
     async updateOrder(e) {
         this.commonErrorElement.style.display = 'none';
         e.preventDefault();
-        if (this.validateForm()) {
+        if (ValidationUtils.validateForm(this.validations)) {
 
             const newData = {
                 description: this.descriptionInputElement.value,
@@ -173,24 +177,5 @@ export class OrdersEdit {
         } else {
             console.log('INVALID')
         }
-    }
-
-    validateForm() {
-        let isValid = true
-
-        if (this.amountInputElement.value.match(/^\d+$/)) {
-            this.amountInputElement.classList.remove('is-invalid');
-        } else {
-            this.amountInputElement.classList.add('is-invalid')
-            isValid = false;
-        }
-
-        if (this.descriptionInputElement.value) {
-            this.descriptionInputElement.classList.remove('is-invalid');
-        } else {
-            this.descriptionInputElement.classList.add('is-invalid')
-            isValid = false;
-        }
-        return isValid;
     }
 }
