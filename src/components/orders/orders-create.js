@@ -1,5 +1,6 @@
-import {HttpUtils} from "../../utils/http-utils";
 import {ValidationUtils} from "../../utils/validation-utils";
+import {FreelancersService} from "../../services/freelancers-service";
+import {OrdersService} from "../../services/orders-service";
 
 export class OrdersCreate {
     constructor(openNewRoute) {
@@ -50,18 +51,13 @@ export class OrdersCreate {
     }
 
     async getFreelancers() {
-        const result = await HttpUtils.request('/freelancers');
-        if (result.redirect) {
-            return this.openNewRoute(result.redirect);
-        }
-        if (result.error || !result.response ||
-            (result.response && (result.response.error || !result.response.freelancers))) {
-            return alert('Возникла ошибка при запросе фрилансеров. Обратитесь в поддержку');
+        const response = await FreelancersService.getFreelancers();
+        if (response.error) {
+            alert(response.error);
+            return response.redirect ? this.openNewRoute(response.redirect) : null;
         }
 
-        const freelancers = result.response.freelancers;
-
-        freelancers.forEach(freelancer => {
+        response.freelancers.forEach(freelancer => {
             const option = document.createElement("option");
             option.value = freelancer.id;
             option.innerText = `${freelancer.name} ${freelancer.lastName}`;
@@ -100,20 +96,16 @@ export class OrdersCreate {
                 createData.completeDate = this.completeDate.toISOString();
             }
 
-            const result = await HttpUtils.request('/orders', 'POST', true, createData);
-
-            if (result.redirect) {
-                this.openNewRoute(result.redirect);
+            const response = await OrdersService.createOrder(createData);
+            if (response.error) {
+                if (response.errorMessage) {
+                    this.commonErrorElement.style.display = 'block';
+                    this.commonErrorElement.innerText = response.errorMessage;
+                } else {alert(response.error);}
+                return response.redirect ? this.openNewRoute(response.redirect) : null;
             }
 
-            if (result.error || !result.response || (result.response && result.response.error)) {
-                this.commonErrorElement.style.display = 'block';
-                if (result.response.message) {
-                    this.commonErrorElement.innerText = result.response.message;
-                }
-                return;
-            }
-            return this.openNewRoute("/orders/view?id=" + result.response.id);
+            return this.openNewRoute("/orders/view?id=" + response.id);
         } else {
             console.log('INVALID')
         }

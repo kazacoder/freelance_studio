@@ -1,6 +1,7 @@
-import {HttpUtils} from "../../utils/http-utils";
 import {ValidationUtils} from "../../utils/validation-utils";
 import {UrlUtils} from "../../utils/url-utils";
+import {FreelancersService} from "../../services/freelancers-service";
+import {OrdersService} from "../../services/orders-service";
 
 export class OrdersEdit {
     constructor(openNewRoute) {
@@ -54,15 +55,14 @@ export class OrdersEdit {
     }
 
     async getOrder(id) {
-        const result = await HttpUtils.request('/orders/' + id);
-        if (result.redirect) {
-            return this.openNewRoute(result.redirect);
+        const response = await OrdersService.getOrder(id);
+        if (response.error) {
+            alert(response.error);
+            return response.redirect ? this.openNewRoute(response.redirect) : null;
         }
-        if (result.error || !result.response || (result.response && result.response.error)) {
-            return alert('Возникла ошибка при запросе заказа. Обратитесь в поддержку');
-        }
-        this.orderOriginalData = result.response
-        this.showOrder(result.response)
+
+        this.orderOriginalData = response.order
+        this.showOrder(response.order)
     }
 
     showOrder(order) {
@@ -91,26 +91,18 @@ export class OrdersEdit {
                 date: order.completeDate,
                 buttons: {showClear: true}
             }));
-
-
         this.calendarScheduled.datetimepicker(Object.assign({}, calendarOptions, {date: order.scheduledDate}));
-
         this.calendarDeadline.datetimepicker(Object.assign({}, calendarOptions, {date: order.deadlineDate}));
     }
 
     async getFreelancers(freelancerId) {
-        const result = await HttpUtils.request('/freelancers');
-        if (result.redirect) {
-            return this.openNewRoute(result.redirect);
-        }
-        if (result.error || !result.response ||
-            (result.response && (result.response.error || !result.response.freelancers))) {
-            return alert('Возникла ошибка при запросе фрилансеров. Обратитесь в поддержку');
+        const response = await FreelancersService.getFreelancers();
+        if (response.error) {
+            alert(response.error);
+            return response.redirect ? this.openNewRoute(response.redirect) : null;
         }
 
-        const freelancers = result.response.freelancers;
-
-        freelancers.forEach(freelancer => {
+        response.freelancers.forEach(freelancer => {
             const option = document.createElement("option");
             option.value = freelancer.id;
             option.innerText = `${freelancer.name} ${freelancer.lastName}`;
@@ -126,7 +118,6 @@ export class OrdersEdit {
         this.commonErrorElement.style.display = 'none';
         e.preventDefault();
         if (ValidationUtils.validateForm(this.validations)) {
-
             const newData = {
                 description: this.descriptionInputElement.value,
                 deadlineDate: this.deadlineDate.toISOString(),
@@ -158,19 +149,15 @@ export class OrdersEdit {
             }
 
             if (Object.keys(updateData).length > 0) {
-                const result = await HttpUtils.request('/orders/' + this.orderOriginalData.id, 'put', true, updateData);
-
-                if (result.redirect) {
-                    this.openNewRoute(result.redirect);
+                const response = await OrdersService.updateOrder(this.id, updateData);
+                if (response.error) {
+                    if (response.errorMessage) {
+                        this.commonErrorElement.style.display = 'block';
+                        this.commonErrorElement.innerText = response.errorMessage;
+                    } else {alert(response.error);}
+                    return response.redirect ? this.openNewRoute(response.redirect) : null;
                 }
 
-                if (result.error || !result.response || (result.response && result.response.error)) {
-                    this.commonErrorElement.style.display = 'block';
-                    if (result.response.message) {
-                        this.commonErrorElement.innerText = result.response.message;
-                    }
-                    return;
-                }
             }
             return this.openNewRoute("/orders/view?id=" + this.orderOriginalData.id);
         } else {

@@ -1,5 +1,5 @@
-import {HttpUtils} from "../utils/http-utils";
 import config from "../config/config";
+import {OrdersService} from "../services/orders-service";
 
 export class Dashboard {
     constructor(openNewRoute) {
@@ -8,16 +8,13 @@ export class Dashboard {
     }
 
     async getOrders() {
-        const result = await HttpUtils.request('/orders');
-        if (result.redirect) {
-            return this.openNewRoute(result.redirect);
+        const response = await OrdersService.getOrders();
+        if (response.error) {
+            alert(response.error);
+            return response.redirect ? this.openNewRoute(response.redirect) : null;
         }
-        if (result.error || !result.response ||
-            (result.response && (result.response.error || !result.response.orders))) {
-            return alert('Возникла ошибка при запросе фрилансеров. Обратитесь в поддержку');
-        }
-        this.loadOrdersInfo(result.response.orders)
-        this.loadCalendarInfo(result.response.orders)
+        this.loadOrdersInfo(response.orders)
+        this.loadCalendarInfo(response.orders)
     }
 
     loadOrdersInfo(orders) {
