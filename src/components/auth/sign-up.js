@@ -20,9 +20,7 @@ export class SignUp {
         document.getElementById('process-button').addEventListener('click', this.signUp.bind(this));
     }
 
-
-    async signUp() {
-        this.commonErrorElement.style.display = 'none';
+    createValidationsObject() {
         this.validations =[
             {element: this.nameElement},
             {element: this.lastNameElement},
@@ -31,6 +29,11 @@ export class SignUp {
             {element: this.passwordRepeatElement, options: {compareTo: this.passwordElement.value}},
             {element: this.argeeElement, options: {checked: true}},
         ]
+    }
+
+    async signUp() {
+        this.commonErrorElement.style.display = 'none';
+        this.createValidationsObject()
         if (ValidationUtils.validateForm(this.validations)) {
             const result = await HttpUtils.request('/signup', 'POST', false, {
                 name: this.nameElement.value,
@@ -54,8 +57,6 @@ export class SignUp {
             console.log(result)
             this.openNewRoute('/');
         } else {
-
         }
     }
-
 }

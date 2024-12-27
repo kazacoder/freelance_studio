@@ -87,19 +87,20 @@ export class OrdersCreate {
         });
     }
 
-
-    async saveOrder(e) {
-        this.commonErrorElement.style.display = 'none';
-        e.preventDefault();
-
-        const validations =[
+    createValidationsObject () {
+        this.validations =[
             {element: this.descriptionInputElement},
             {element: this.scheduledCardElement, options: {checkProperty: this.scheduledDate}},
             {element: this.deadlineCardElement, options: {checkProperty: this.deadlineDate}},
             {element: this.amountInputElement, options: {pattern: /^\d+$/}},
         ]
+    }
 
-        if (ValidationUtils.validateForm(validations)) {
+    async saveOrder(e) {
+        this.commonErrorElement.style.display = 'none';
+        e.preventDefault();
+        this.createValidationsObject()
+        if (ValidationUtils.validateForm(this.validations)) {
             const createData = {
                 description: this.descriptionInputElement.value,
                 deadlineDate: this.deadlineDate.toISOString(),
