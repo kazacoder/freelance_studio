@@ -10,16 +10,20 @@ export class Login {
             return this.openNewRoute('/')
         }
 
-        this.emailElement = document.getElementById('email');
-        this.passwordElement = document.getElementById('password');
-        this.rememberMeElement = document.getElementById('remember');
-        this.commonErrorElement = document.getElementById('common-error');
+        this.findElements()
         this.validations =[
             {element: this.passwordElement},
             {element: this.emailElement, options: {pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/}},
         ]
         document.getElementById('process-button').addEventListener('click', this.login.bind(this));
 
+    }
+
+    findElements() {
+        this.emailElement = document.getElementById('email');
+        this.passwordElement = document.getElementById('password');
+        this.rememberMeElement = document.getElementById('remember');
+        this.commonErrorElement = document.getElementById('common-error');
     }
 
     async login() {

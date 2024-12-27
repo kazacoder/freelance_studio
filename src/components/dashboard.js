@@ -31,7 +31,7 @@ export class Dashboard {
     }
 
     loadCalendarInfo(orders) {
-        const preparedEvents = []
+        const preparedEvents = [];
 
         orders.forEach(order => {
             let color = null
@@ -40,10 +40,9 @@ export class Dashboard {
             }
 
             if (order.scheduledDate) {
-                const scheduledDate = new Date(order.scheduledDate);
                 preparedEvents.push({
                     title: `${order.freelancer.name} ${order.freelancer.lastName} выполняет заказ ${order.number}`,
-                    start: scheduledDate,
+                    start: new Date(order.scheduledDate),
                     backgroundColor: color ? color : '#00c0ef', //Info (aqua)
                     borderColor: color ? color : '#00c0ef', //Info (aqua)
                     allDay: true,
@@ -51,10 +50,9 @@ export class Dashboard {
             }
 
             if (order.deadlineDate) {
-                const deadlineDate = new Date(order.deadlineDate);
                 preparedEvents.push({
                     title: `Дедлайн заказа ${order.number}`,
-                    start: deadlineDate,
+                    start: new Date(order.deadlineDate),
                     backgroundColor: color ? color : '#f39c12', //yellow
                     borderColor: color ? color : '#f39c12', //yellow
                     allDay: true,
@@ -62,19 +60,17 @@ export class Dashboard {
             }
 
             if (order.completeDate) {
-                const completeDate = new Date(order.completeDate);
                 preparedEvents.push({
                     title: `Заказ ${order.number} выполнен фрилансером ${order.freelancer.name}`,
-                    start: completeDate,
+                    start: new Date(order.completeDate),
                     backgroundColor: '#00a65a', //Success (green)
                     borderColor: '#00a65a', //Success (green)
                     allDay: true,
                 })
             }
-        })
+        });
 
-        const calendarElement = document.getElementById('calendar')
-        const calendar = new FullCalendar.Calendar(calendarElement, {
+        (new FullCalendar.Calendar(document.getElementById('calendar'), {
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
@@ -83,9 +79,7 @@ export class Dashboard {
                 themeSystem: 'bootstrap',
                 locale: 'ru',
                 events: preparedEvents,
-            }
-        )
-        calendar.render();
+            })).render();
     }
 }
 

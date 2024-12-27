@@ -49,4 +49,13 @@ export class CommonUtils {
         }
         return info;
     }
+
+    static generateGridToolsColumn (entity, id) {
+        return  '<div class="' + entity + '-tools">' +
+        '<a href="/' + entity + '/view?id=' + id + '" class="fas fa-eye" title="Просмотр"></a>' +
+        '<a href="/' + entity + '/edit?id=' + id + '" class="fas fa-edit" title="Редактирование"></a>' +
+        '<a href="#" class="fas fa-trash delete-item" delete-link="/' + entity + '/delete?id=' + id
+            + '" title="Удаление" data-toggle="modal" data-target="#modal-danger"></a>' +
+        '</div>';
+    }
 }

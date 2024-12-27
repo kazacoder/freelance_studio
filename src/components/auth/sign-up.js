@@ -9,14 +9,8 @@ export class SignUp {
         if (localStorage.getItem('accessToken')) {
             return this.openNewRoute('/')
         }
+        this.findElements()
 
-        this.nameElement = document.getElementById('name');
-        this.lastNameElement = document.getElementById('last-name');
-        this.emailElement = document.getElementById('email');
-        this.passwordElement = document.getElementById('password');
-        this.passwordRepeatElement = document.getElementById('password-repeat');
-        this.argeeElement = document.getElementById('agree');
-        this.commonErrorElement = document.getElementById('common-error');
         document.getElementById('process-button').addEventListener('click', this.signUp.bind(this));
     }
 
@@ -29,6 +23,16 @@ export class SignUp {
             {element: this.passwordRepeatElement, options: {compareTo: this.passwordElement.value}},
             {element: this.argeeElement, options: {checked: true}},
         ]
+    }
+
+    findElements() {
+        this.nameElement = document.getElementById('name');
+        this.lastNameElement = document.getElementById('last-name');
+        this.emailElement = document.getElementById('email');
+        this.passwordElement = document.getElementById('password');
+        this.passwordRepeatElement = document.getElementById('password-repeat');
+        this.argeeElement = document.getElementById('agree');
+        this.commonErrorElement = document.getElementById('common-error');
     }
 
     async signUp() {

@@ -3,37 +3,37 @@ import config from "../../config/config";
 import {CommonUtils} from "../../utils/common-utils";
 import {FileUtils} from "../../utils/file-utils";
 import {ValidationUtils} from "../../utils/validation-utils";
+import {UrlUtils} from "../../utils/url-utils";
 
 export class FreelancersEdit {
     constructor(openNewRoute) {
         this.openNewRoute = openNewRoute;
         bsCustomFileInput.init();
         this.freelancerOriginalData ={};
-        this.inputs = {}
-        this.commonErrorElement = document.getElementById('common-error');
-        document.querySelectorAll('input, textarea, select').forEach(el => {
-            this.inputs[el.id + 'Element'] = el;
-        })
-        this.textInputsArray = Object.values(this.inputs).filter(el => el.type === 'text' || el.type === 'textarea')
+        this.findElements()
         this.validations = [{
             element: this.inputs.emailInputElement,
             options: {
                 pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
             }
         }]
-        this.textInputsArray.forEach(el => {
-            this.validations.push({
-                element: el,
-            })
-        })
-        const urlParams = new URLSearchParams(window.location.search);
-        this.id = urlParams.get('id');
+        this.textInputsArray.forEach(el => {this.validations.push({element: el})})
+        this.id = UrlUtils.getUrlParam('id');
         if (!this.id) {
             return this.openNewRoute('/');
         }
         this.getFreelancer(this.id).then()
         document.getElementById('updateButton').addEventListener('click', this.updateFreelancers.bind(this));
 
+    }
+
+    findElements () {
+        this.inputs = {}
+        this.commonErrorElement = document.getElementById('common-error');
+        document.querySelectorAll('input, textarea, select').forEach(el => {
+            this.inputs[el.id + 'Element'] = el;
+        })
+        this.textInputsArray = Object.values(this.inputs).filter(el => el.type === 'text' || el.type === 'textarea')
     }
 
     async getFreelancer(id) {

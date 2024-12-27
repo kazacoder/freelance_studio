@@ -11,47 +11,35 @@ export class OrdersCreate {
         this.deadlineDate = null;
         this.completeDate = null;
 
-        calendarScheduled.datetimepicker({
+        const calendarOptions = {
             inline: true,
             locale: 'ru',
-            icons: {
-                time: 'far fa-clock',
-            },
+            icons: {time: 'far fa-clock'},
             useCurrent: false,
-        });
+        }
+        calendarScheduled.datetimepicker(calendarOptions);
         calendarScheduled.on('change.datetimepicker', (e) => {
             this.scheduledDate = e.date
         });
 
-        calendarComplete.datetimepicker({
-            inline: true,
-            locale: 'ru',
-            icons: {
-                time: 'far fa-clock',
-            },
-            useCurrent: false,
-            buttons: {
-                showClear: true,
-            }
-        });
-        calendarComplete.on('change.datetimepicker', (e) => {
-            this.completeDate = e.date
-        });
-
-        calendarDeadline.datetimepicker({
-            inline: true,
-            locale: 'ru',
-            icons: {
-                time: 'far fa-clock',
-            },
-            useCurrent: false,
-        });
+        calendarDeadline.datetimepicker(calendarOptions);
         calendarDeadline.on('change.datetimepicker', (e) => {
             this.deadlineDate = e.date
         })
 
+        calendarOptions.buttons = {showClear: true}
+        calendarComplete.datetimepicker(calendarOptions);
+        calendarComplete.on('change.datetimepicker', (e) => {
+            this.completeDate = e.date
+        });
         this.getFreelancers().then()
+        this.findElements()
 
+        document.getElementById('saveButton').addEventListener('click', this.saveOrder.bind(this));
+
+    }
+
+    findElements() {
         this.commonErrorElement = document.getElementById('common-error');
         this.freelancerSelectElement = document.getElementById('freelancerSelect');
         this.amountInputElement = document.getElementById('amountInput');
@@ -59,8 +47,6 @@ export class OrdersCreate {
         this.statusSelectElement = document.getElementById('statusSelect');
         this.scheduledCardElement = document.getElementById('scheduled-card');
         this.deadlineCardElement = document.getElementById('deadline-card');
-        document.getElementById('saveButton').addEventListener('click', this.saveOrder.bind(this));
-
     }
 
     async getFreelancers() {

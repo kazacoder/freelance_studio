@@ -20,8 +20,10 @@ export class OrdersList {
         this.showRecords(result.response.orders)
     }
 
-    showRecords (orders) {
+    showRecords(orders) {
         orders.forEach((order) => {
+            const statusInfo = CommonUtils.getStatusInfoHtml(order.status)
+
             const trElement = document.createElement('tr');
             trElement.insertCell().innerText = order.number;
             trElement.insertCell().innerText = order.owner.name + ' ' + order.owner.lastName;
@@ -29,24 +31,11 @@ export class OrdersList {
                 `<a href="/freelancers/view?id=${order.freelancer.id}">${order.freelancer.name + ' ' + order.freelancer.lastName}</a>`
             trElement.insertCell().innerText = new Date(order.scheduledDate).toLocaleString('ru-RU');
             trElement.insertCell().innerText = new Date(order.deadlineDate).toLocaleString('ru-RU');
-
-            const statusInfo = CommonUtils.getStatusInfoHtml(order.status)
             trElement.insertCell().innerHTML = `<span class="badge badge-${statusInfo.color}">${statusInfo.name}</span>`;
-
-
-            if (order.completeDate) {
-                trElement.insertCell().innerText = new Date(order.completeDate).toLocaleString('ru-RU');
-            }  else trElement.insertCell().innerText = ''
-            trElement.insertCell().innerHTML =
-                '<div class="order-tools">' +
-                '<a href="/orders/view?id=' + order.id + '" class="fas fa-eye" title="Просмотр"></a>' +
-                '<a href="/orders/edit?id=' + order.id + '" class="fas fa-edit" title="Редактирование"></a>' +
-                '<a href="#" class="fas fa-trash delete-item" delete-link="/orders/delete?id=' + order.id + '" title="Удаление" data-toggle="modal" data-target="#modal-danger"></a>' +
-                // '<a href="/orders/delete?id=' + order.id + '" class="fas fa-trash" title="Удаление"></a>' +
-                '</div>';
+            trElement.insertCell().innerText = order.completeDate ? new Date(order.completeDate).toLocaleString('ru-RU') : '';
+            trElement.insertCell().innerHTML = CommonUtils.generateGridToolsColumn('orders', order.id)
 
             this.recordsElement.appendChild(trElement);
-
         });
 
         document.querySelectorAll('.delete-item').forEach(element => {
@@ -61,8 +50,8 @@ export class OrdersList {
                 "search": "Фильтр:",
                 "info": "Страница _PAGE_ из _PAGES_",
                 "paginate": {
-                    "next":       "Вперед",
-                    "previous":   "Назад"
+                    "next": "Вперед",
+                    "previous": "Назад"
                 },
             },
             "paging": true,

@@ -33,13 +33,7 @@ export class FreelancersList {
             trElement.insertCell().innerText = freelancer.education;
             trElement.insertCell().innerText = freelancer.location;
             trElement.insertCell().innerText = freelancer.skills;
-            trElement.insertCell().innerHTML =
-                '<div class="freelancer-tools">' +
-                '<a href="/freelancers/view?id=' + freelancer.id + '" class="fas fa-eye" title="Просмотр"></a>' +
-                '<a href="/freelancers/edit?id=' + freelancer.id + '" class="fas fa-edit" title="Редактирование"></a>' +
-                '<a href="#" class="fas fa-trash delete-item" delete-link="/freelancers/delete?id=' + freelancer.id + '" title="Удаление" data-toggle="modal" data-target="#modal-danger"></a>' +
-                // '<a href="/freelancers/delete?id=' + freelancer.id + '" class="fas fa-trash" title="Удаление"></a>'
-                '</div>';
+            trElement.insertCell().innerHTML = CommonUtils.generateGridToolsColumn('freelancers', freelancer.id)
             this.recordsElement.appendChild(trElement);
 
         });

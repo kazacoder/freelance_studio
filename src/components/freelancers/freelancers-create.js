@@ -6,27 +6,23 @@ export class FreelancersCreate {
     constructor(openNewRoute) {
         this.openNewRoute = openNewRoute;
         bsCustomFileInput.init();
+        this.findElements()
+        this.validations = [{
+            element: this.inputs.emailInputElement,
+            options: {pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/}
+        }]
+        this.textInputsArray.forEach(el => {this.validations.push({element: el})})
+        document.getElementById('saveButton').addEventListener('click', this.saveFreelancers.bind(this));
+    }
+
+    findElements () {
         this.inputs = {}
         this.commonErrorElement = document.getElementById('common-error');
         document.querySelectorAll('input, textarea, select').forEach(el => {
             this.inputs[el.id + 'Element'] = el;
         })
         this.textInputsArray = Object.values(this.inputs).filter(el => el.type === 'text' || el.type === 'textarea')
-        this.validations = [{
-            element: this.inputs.emailInputElement,
-            options: {
-                pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
-            }
-        }]
-        this.textInputsArray.forEach(el => {
-            this.validations.push({
-                element: el,
-            })
-        })
-        document.getElementById('saveButton').addEventListener('click', this.saveFreelancers.bind(this));
-
     }
-
 
     async saveFreelancers(e) {
         this.commonErrorElement.style.display = 'none';
@@ -64,6 +60,5 @@ export class FreelancersCreate {
         } else {
             console.log('INVALID')
         }
-
     }
 }
