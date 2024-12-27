@@ -1,6 +1,6 @@
-import {HttpUtils} from "../../utils/http-utils";
 import {FileUtils} from "../../utils/file-utils";
 import {ValidationUtils} from "../../utils/validation-utils";
+import {FreelancersService} from "../../services/freelancers-service";
 
 export class FreelancersCreate {
     constructor(openNewRoute) {
@@ -43,20 +43,16 @@ export class FreelancersCreate {
                 createData.avatarBase64 = await FileUtils.convertFileToBase64(this.inputs.avatarInputElement.files[0])
             }
 
-            const result = await HttpUtils.request('/freelancers', 'POST', true, createData);
-
-            if (result.redirect) {
-                this.openNewRoute(result.redirect);
+            const response = await FreelancersService.createFreelancer(createData);
+            if (response.error) {
+                if (response.errorMessage) {
+                    this.commonErrorElement.style.display = 'block';
+                    this.commonErrorElement.innerText = response.errorMessage;
+                } else {alert(response.error);}
+                return response.redirect ? this.openNewRoute(response.redirect) : null;
             }
 
-            if (result.error || !result.response || (result.response && result.response.error)) {
-                this.commonErrorElement.style.display = 'block';
-                if (result.response.message) {
-                    this.commonErrorElement.innerText = result.response.message;
-                }
-                return;
-            }
-            return this.openNewRoute("/freelancers/view?id=" + result.response.id);
+            return this.openNewRoute("/freelancers/view?id=" + response.id);
         } else {
             console.log('INVALID')
         }

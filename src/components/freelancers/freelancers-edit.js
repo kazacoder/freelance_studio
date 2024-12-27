@@ -1,9 +1,9 @@
-import {HttpUtils} from "../../utils/http-utils";
 import config from "../../config/config";
 import {CommonUtils} from "../../utils/common-utils";
 import {FileUtils} from "../../utils/file-utils";
 import {ValidationUtils} from "../../utils/validation-utils";
 import {UrlUtils} from "../../utils/url-utils";
+import {FreelancersService} from "../../services/freelancers-service";
 
 export class FreelancersEdit {
     constructor(openNewRoute) {
@@ -37,15 +37,14 @@ export class FreelancersEdit {
     }
 
     async getFreelancer(id) {
-        const result = await HttpUtils.request('/freelancers/' + id);
-        if (result.redirect) {
-            return this.openNewRoute(result.redirect);
+        const response = await FreelancersService.getFreelancer(id);
+        if (response.error) {
+            alert(response.error);
+            return response.redirect ? this.openNewRoute(response.redirect) : null;
         }
-        if (result.error || !result.response || (result.response && result.response.error)) {
-            return alert('Возникла ошибка при запросе фрилансера. Обратитесь в поддержку');
-        }
-        this.freelancerOriginalData = result.response
-        this.showFreelancer(result.response)
+
+        this.freelancerOriginalData = response.freelancer;
+        this.showFreelancer(response.freelancer);
     }
 
     showFreelancer(freelancer) {
@@ -96,18 +95,13 @@ export class FreelancersEdit {
             }
 
             if (!!Object.keys(changedData).length) {
-                const result = await HttpUtils.request('/freelancers/' + this.id, 'PUT', true, changedData);
-
-                if (result.redirect) {
-                    this.openNewRoute(result.redirect);
-                }
-
-                if (result.error || !result.response || (result.response && result.response.error)) {
-                    this.commonErrorElement.style.display = 'block';
-                    if (result.response.message) {
-                        this.commonErrorElement.innerText = result.response.message;
-                    }
-                    return;
+                const response = await FreelancersService.updateFreelancer(this.id, changedData);
+                if (response.error) {
+                    if (response.errorMessage) {
+                        this.commonErrorElement.style.display = 'block';
+                        this.commonErrorElement.innerText = response.errorMessage;
+                    } else {alert(response.error);}
+                    return response.redirect ? this.openNewRoute(response.redirect) : null;
                 }
             }
             return this.openNewRoute("/freelancers/view?id=" + this.id);
