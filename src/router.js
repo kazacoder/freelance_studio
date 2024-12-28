@@ -76,6 +76,9 @@ export class Router {
                 route: '/logout',
                 load: () => {
                     new Logout(this.openNewRoute.bind(this))
+                },
+                unload: () => {
+                    this.userName = null;
                 }
             },
             {
